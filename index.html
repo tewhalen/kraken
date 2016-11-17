@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>kraken &mdash; kraken 0.8.0
+    <title>kraken &mdash; kraken 0.9.1
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0
+        VERSION:     '0.9.1
 ',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="kraken 0.8.0
+    <link rel="top" title="kraken 0.9.1
  documentation" href="#" />
     <link rel="next" title="Advanced usage" href="advanced.html" />
    
@@ -55,7 +55,7 @@ with kraken without all the fuss of the original ocropus tools.</p>
 <blockquote>
 <div><ul class="simple">
 <li>Explicit input/output handling</li>
-<li>Word bounding boxes and character cuts in hOCR</li>
+<li>Word bounding boxes and character cuts</li>
 <li>Removal of runtime dependency on gcc</li>
 <li><a class="reference external" href="https://github.com/mittagessen/kraken-models">Public repository</a> of model files</li>
 <li><a class="reference internal" href="models.html#models"><span>Lightweight model files</span></a></li>
@@ -71,15 +71,14 @@ with kraken without all the fuss of the original ocropus tools.</p>
 </ul>
 </div></blockquote>
 <p>All functionality not pertaining to OCR and prerequisite steps has been
-removed, i.e. no more ground truth editing, error rate measuring, etc.</p>
+removed, i.e. no more error rate measuring, etc.</p>
 <p>Pull requests and code contributions are always welcome.</p>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
-<p>While kraken does not require a working C compiler on run-time anymore numpy
-and scipy compilation still requires build-essential or your distributions
-equivalent and some dependencies.</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> apt-get install gcc gfortran python-dev libblas-dev liblapack-dev libpangocairo-1.0
+<p>kraken requires some external libraries to run. On Debian/Ubuntu they may be
+installed using:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">#</span> apt-get install libpangocairo-1.0 libxml2 libblas3 liblapack3
 </pre></div>
 </div>
 <p>If <a class="reference external" href="https://github.com/tmbdev/clstm">clstm</a> support is desired (highly
@@ -111,6 +110,30 @@ place it in the kraken directory for the current user:</p>
 <div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken get default
 </pre></div>
 </div>
+<p>A list of libre models available in the central repository can be retrieved by
+running:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ kraken list
+</pre></div>
+</div>
+<p>Model metadata can be extracted using:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ kraken show arabic-alam-al-kutub
+name: arabic-alam-al-kutub.clstm
+
+An experimental model for Classical Arabic texts.
+
+Network trained on 889 lines of [0] as a test case for a general Classical
+Arabic model. Ground truth was prepared by Sarah Savant
+&lt;sarah.savant@aku.edu&gt; and Maxim Romanov &lt;maxim.romanov@uni-leipzig.de&gt;.
+
+Vocalization was omitted in the ground truth. Training was stopped at ~35000
+iterations with an accuracy of 97%.
+
+[0] Ibn al-Faqīh (d. 365 AH). Kitāb al-buldān. Edited by Yūsuf al-Hādī, 1st
+edition. Bayrūt: ʿĀlam al-kutub, 1416 AH/1996 CE.
+alphabet:  !()-.0123456789:[] «»،؟ءابةتثجحخدذرزسشصضطظعغفقكلمنهوىي ARABIC
+MADDAH ABOVE, ARABIC HAMZA ABOVE, ARABIC HAMZA BELOW
+</pre></div>
+</div>
 </div>
 <div class="section" id="quickstart">
 <h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
@@ -134,6 +157,8 @@ page segmentation:</p>
 <div class="highlight-python"><div class="highlight"><pre>$ kraken -i bw.tif image.txt ocr --lines lines.txt
 </pre></div>
 </div>
+<p>All commands and their parameters are documented, just add the standard
+<code class="docutils literal"><span class="pre">--help</span></code> flag for further information.</p>
 </div>
 <div class="section" id="license">
 <span id="id2"></span><h1>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h1>

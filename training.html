@@ -1,0 +1,413 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Training a kraken model &mdash; kraken 0.9.1
+ documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.1
+',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="kraken 0.9.1
+ documentation" href="index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="training-a-kraken-model">
+<h1>Training a kraken model<a class="headerlink" href="#training-a-kraken-model" title="Permalink to this headline">¶</a></h1>
+<p>kraken is an optical character recognition package that can be trained fairly
+easily for a large number of scripts. In contrast to other system requiring
+segmentation down to glyph level before classification, it is uniquely suited
+for the recognition of connected scripts, because the neural network is trained
+to assign correct character to unsegmented training data.</p>
+<p>Training a new model for kraken requires a variable amount of training data
+manually generated from page images which have to be typographically similar to
+the target prints that are to be recognized. As the system works on unsegmented
+inputs for both training and recognition and its base unit is a text line,
+training data are just transcriptions aligned to line images.</p>
+<div class="section" id="installing-kraken">
+<h2>Installing kraken<a class="headerlink" href="#installing-kraken" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to install and use kraken is through a <a class="reference external" href="https://vagrantup.com">vagrant</a> virtual machine. After downloading and installing
+vagrant, the box can be provisioned.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> vagrant init openphilology/kraken
+<span class="gp">$</span> vagrant up
+</pre></div>
+</div>
+<p>After running the above commands, the box should be up and running. The
+directory these commands are executed in is mapped into the virtual machine and
+can be used to exchange data with the host system. The virtual machine can be
+accessed through running:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> vagrant ssh
+</pre></div>
+</div>
+</div>
+<div class="section" id="image-acquisition-and-preprocessing">
+<h2>Image acquisition and preprocessing<a class="headerlink" href="#image-acquisition-and-preprocessing" title="Permalink to this headline">¶</a></h2>
+<p>First a number of high quality scans, preferably color or grayscale and at
+least 300dpi are required. Scans should be in a lossless image format such as
+TIFF or PNG, images in PDF files have to be extracted beforehand using a tool
+such as <code class="docutils literal"><span class="pre">pdftocairo</span></code> or <code class="docutils literal"><span class="pre">pdfimages</span></code>. While each of these requirements can
+be relaxed to a degree, the final accuracy will suffer to some extent. For
+example, only slightly compressed JPEG scans are generally suitable for
+training and recognition.</p>
+<p>Depending on the source of the scans some preprocessing such as splitting scans
+into pages, correcting skew and warp, and removing speckles is usually
+required. For complex layouts such as newspapers it is advisable to split the
+page manually into columns as the line extraction algorithm run to create
+transcription environments does not deal well with non-codex page layouts. A
+fairly user-friendly software for semi-automatic batch processing of image
+scans is <a class="reference external" href="http://scantailor.org">Scantailor</a> albeit most work can be done
+using a standard image editor.</p>
+<p>The total number of scans required depends on the nature of the script to be
+recognized. Only features that are found on the page images and training data
+derived from it can later be recognized, so it is important that the coverage
+of typographic features is exhaustive. Training a single script model for a
+fairly small script such as Arabic or Hebrew requires at least 800 lines, while
+multi-script models, e.g. combined polytonic Greek and Latin, will require
+significantly more transcriptions.</p>
+<p>There is no hard rule for the amount of training data and it may be required to
+retrain a model after the initial training data proves insufficient. Most
+<code class="docutils literal"><span class="pre">western</span></code> texts contain between 25 and 40 lines per page, therefore upward of
+30 pages have to be preprocessed and later transcribed.</p>
+</div>
+<div class="section" id="transcription">
+<h2>Transcription<a class="headerlink" href="#transcription" title="Permalink to this headline">¶</a></h2>
+<p>Transcription is done through local browser based HTML transcription
+environments. These are created by the <code class="docutils literal"><span class="pre">ketos</span> <span class="pre">transcrib</span></code> command line util
+that is part of kraken. Its basic input is just a number of image files and an
+output path to write the HTML file to:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ketos transcrib -o output.html image_1.png image_2.png ...
+</pre></div>
+</div>
+<p>While it is possible to put multiple images into a single transcription
+environment splitting into one-image-per-HTML will ease parallel transcription
+by multiple people.</p>
+<p>The above command reads in the image files, converts them to black and white if
+necessary, tries to split them into line images, and puts an editable text
+field next to the image in the HTML.</p>
+<p>Transcription has to be diplomatic, i.e. contain the exact character sequence
+in the line image, including original orthography. Some deviations, such as
+consistently omitting vocalization in Arabic texts, is possible as long as they
+are systematic and relatively minor.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The page segmentation algorithm extracting lines from images is
+optimized for <code class="docutils literal"><span class="pre">western</span></code> page layouts and may recognize lines
+erroneously, lumping multiple lines together or cutting them in half.
+The most efficient way to deal with these errors is just skipping the
+affected lines by leaving the text box empty.</p>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">Copy-paste transcription can significantly speed up the whole process.
+Either transcribe scans of a work where a digital edition already
+exists (but does not for typographically similar prints) or find a
+sufficiently similar edition as a base.</p>
+</div>
+<p>After transcribing a number of lines the results have to be saved, either using
+the <code class="docutils literal"><span class="pre">Download</span></code> button on the lower right or through the regular <code class="docutils literal"><span class="pre">Save</span> <span class="pre">Page</span>
+<span class="pre">As</span></code> function of the browser. All the work done is contained directly in the
+saved files and it is possible to save partially transcribed files and continue
+work later.</p>
+<p>Next the contents of the filled transcription environments have to be
+extracted through the <code class="docutils literal"><span class="pre">ketos</span> <span class="pre">extract</span></code> command:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ketos extract --reorder --output output_directory --normalization NFD *.html
+</pre></div>
+</div>
+<p>with</p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--reorder</span></kbd></td>
+<td>Tells ketos to reorder the code point for each line into left-to-right
+order. Unicode code points are always in reading order, e.g. the first
+code point in an Arabic line will be the rightmost character. This
+option reorders them into <code class="docutils literal"><span class="pre">display</span> <span class="pre">order</span></code>, i.e. the first code point
+is the leftmost, the second one the next from the left and so on. As
+the neural network does not know beforehand if part of an image
+contains left-to-right or right-to-left text, all glyphs are assumed to
+be left-to-right and later reordered for correct display.</td></tr>
+<tr><td class="option-group">
+<kbd><span class="option">--output</span></kbd></td>
+<td>The output directory where all line image-text pairs (training data)
+are written.</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">--normalization</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Unicode has code points to encode most glyphs encountered in the wild.
+A lesser known feature is that there usually are multiple ways to
+encode a glyph.  <a class="reference external" href="http://www.unicode.org/reports/tr15/">Unicode normalization</a> ensures that equal glyphs are
+encoded in the same way, i.e. that the encoded representation across
+the training data set is consistent and there is only one way the
+network can recognize a particular feature on the page. Usually it is
+sufficient to set the normalization to Normalization Form
+Decomposed (NFD), as it reduces the the size of the overall script to
+be recognized slightly.</td></tr>
+</tbody>
+</table>
+<p>The result will be a directory filled with line image text pairs <code class="docutils literal"><span class="pre">NNNNNN.png</span></code>
+and <code class="docutils literal"><span class="pre">NNNNNN.gt.txt</span></code> and a <code class="docutils literal"><span class="pre">manifest.txt</span></code> containing a list of all extracted
+lines.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">At this point it is recommended to review the content of the training
+data directory before proceeding.</p>
+</div>
+</div>
+<div class="section" id="training">
+<h2>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h2>
+<p>The training data in <code class="docutils literal"><span class="pre">output_dir</span></code> may now be used to train a new model by
+invoking the <code class="docutils literal"><span class="pre">train.sh</span></code> script in the vagrant box&#8217;s home directory. 100 lines
+will be split off from the actual training set into a separate test set for
+validation purposes. These are never shown to the network for training purposes
+but will be periodically recognized to evaluate the accuracy of the model.</p>
+<p>Model training is mostly automatic albeit there are parameters in the training
+script that may be adjusted if necessary:</p>
+<dl class="docutils">
+<dt>save_every</dt>
+<dd>Sets the frequence the model is saved during training. Per default the
+network is serialized after 1000 epochs of training. An epoch is the
+number of training steps after which each randomly drawn line has been
+seens once by the network (on average).</dd>
+<dt>test_every</dt>
+<dd>How often the trained network is evaluated on the test set.</dd>
+<dt>hidden</dt>
+<dd>The number of nodes in the internal <code class="docutils literal"><span class="pre">hidden</span></code> layer of the network.
+Larger networks are capable of capturing more complex patterns but will
+slow down training and recognition significantly.</dd>
+<dt>lrate</dt>
+<dd>Learning rate of the network. Lower values cause training to take
+longer while higher values may cause the network not to converge at
+all, i.e. not learn a set of weights producing high recognition
+accuracy.</dd>
+</dl>
+<p>Training a network will take some time on a modern computer, even with the
+default parameters. While the exact time required is unpredictable as training
+is a somewhat random process a rough guide is that accuracy seldomly improves
+after 40000 epochs reached between 8 and 24 hours of training.</p>
+<p>When to stop is a matter of experience (and personal preference); a fairly
+reliable approach known as <a class="reference external" href="https://en.wikipedia.org/wiki/Early_stopping">early stopping</a> is stopping training
+immediately as soon as the error rate on the test set worsens. This will
+prevent <a class="reference external" href="https://en.wikipedia.org/wiki/Overfitting">overfitting</a>, i.e. fitting
+the model to recognize only the training data properly instead of the general
+patterns contained therein.</p>
+<p>Running the script will look like this after a couple of minutes:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> ./train.sh output_dir model_name
+<span class="go">*** charsep</span>
+<span class="go">got 778 files, 100 tests</span>
+<span class="go">got 55 classes</span>
+<span class="go">.stacked: 0.0001 0.9 in 0 48 out 0 55</span>
+<span class="go">.stacked.parallel: 0.0001 0.9 in 0 48 out 0 200</span>
+<span class="go">.stacked.parallel.lstm: 0.0001 0.9 in 0 48 out 0 100</span>
+<span class="go">.stacked.parallel.reversed: 0.0001 0.9 in 0 48 out 0 100</span>
+<span class="go">.stacked.parallel.reversed.lstm: 0.0001 0.9 in 0 48 out 0 100</span>
+<span class="go">.stacked.softmax: 0.0001 0.9 in 0 200 out 0 55</span>
+<span class="go">0</span>
+<span class="go">TRU ܇ܢܝܬܝܡ ܐܠܕ ܐ̈ܝܚ .̣ܢܘܗܠ ̣ܒܗܝ ܐܬܘܒܝܛܒ ܡܕܡ ܠܘܟ</span>
+<span class="go">ALN</span>
+<span class="go">OUT</span>
+<span class="go">ERROR 1000 0.60224     2474 4108</span>
+<span class="go">1000</span>
+<span class="go">TRU ܀ܐ̣ܘܗ ܛܝܠܫ ܐܝܬ̈ܚܬ ܠܥܘ ܐܝܠ̈ܥ ܠܥܕ</span>
+<span class="go">ALN ܀܀ܐ̣ܘܗ ܛܛܝܠܫ ܐܝܬܚܬ ܠܥܘ ܐܝܠ ܠܠܠܥܕ</span>
+<span class="go">OUT ܘ ܐܘܘ ܘ ܝܫ ܐܢܘܢ ܢܘ ܐܝ</span>
+<span class="go">ERROR 2000 0.204236     839 4108</span>
+<span class="go">2000</span>
+<span class="go">TRU ܐܘܚ .ܗܠ ܐ̣ܘܗ ܚܫܚ ܗܬܘܟܐܕ ܐܣܢܓ ܪܒ ܐܠܐ .̣ܐܢ̈ܪܕܥܡ</span>
+<span class="go">ALN ܐܘܚ .ܗܠ ܐ̣ܘܗ ܚܫܚ ܗܬܘܟܐ ܐܣܢܓ ܪܒ ܐܠܐ .ܐܢ̈ܪܕܥܡ</span>
+<span class="go">OUT ܐܘܬܚ .ܗ ܐܘܗ ܚܫܚ ܗܬܘܟܐ ܐܘܢܓ ܪ ܐܠܐ .ܐܢܪܕܥܡa</span>
+<span class="go">ERROR 3000 0.0946933     389 4108</span>
+<span class="go">3000</span>
+<span class="go">TRU ܢܘܗܝ̈ܒܘܥ ܘܓ ܢܡ ܢܕܥ ܠܟܒܕ ܐ̈ܝܡܠܘ ܐܥܪܐܠ ̇ܗܠ ܕܩܦܬܐ</span>
+<span class="go">ALN ܢܘܗܝ̈ܒܘܥ ܘܓ ܢܡ  ܢܕܥ ܠܟܒܕ ܐ̈ܝܡܠܘ ܐܥܪܐܠ ̇ܗܠ ܕܩܦܬܐ</span>
+<span class="go">OUT ܢܘܗܝܒܘܥ ܘܓ ܢܒܢܕܥ ܠܟܒܕܐܝܡܠܘ ܐܥܪܐܠ ܗܠ ܕܩܦܬܐ</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>By now there should be a couple of models model_name-1000.clstm,
+model_name-2000.clstm, ... in the directory the script was executed in. Lets
+take a look at each part of the output.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">got 778 files, 100 tests</span>
+<span class="go">got 55 classes</span>
+</pre></div>
+</div>
+<p>indicates that the training is running on 778 transcribed lines and a test set
+of 100 lines. 55 different classes, i.e. Unicode code points, where found in
+these 778 lines. These affect the output size of the network; obviously only
+these 55 different classes/code points can later be output by the network.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">ERROR 1000 0.60224     2474 4108</span>
+</pre></div>
+</div>
+<p>this line shows the results of the test set evaluation. The error after the
+<code class="docutils literal"><span class="pre">1000</span></code> epochs is <code class="docutils literal"><span class="pre">2474</span></code> incorrect code points out of <code class="docutils literal"><span class="pre">4108</span></code> in the set or
+<code class="docutils literal"><span class="pre">0.60224</span></code>/60%. It should decrease fairly rapidly, in the example it drops to
+0.20 after 2000 epochs.</p>
+<p>If it remains around 0.70 something is amiss, e.g. non-reordered right-to-left
+or wildly incorrect transcriptions. Abort training, correct the error(s) and
+start again.</p>
+<p>The next part is just the network output for a random line where <code class="docutils literal"><span class="pre">TRU</span></code> is the
+transcription and <code class="docutils literal"><span class="pre">OUT</span></code> is the recognized text. <code class="docutils literal"><span class="pre">ALN</span></code> is a derivative
+output used internally for adjusting the network&#8217;s weights. It should not be
+used for any kind of evaluation and is purely for informational purposes.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">TRU ܐܘܚ .ܗܠ ܐ̣ܘܗ ܚܫܚ ܗܬܘܟܐܕ ܐܣܢܓ ܪܒ ܐܠܐ .̣ܐܢ̈ܪܕܥܡ</span>
+<span class="go">ALN ܐܘܚ .ܗܠ ܐ̣ܘܗ ܚܫܚ ܗܬܘܟܐ ܐܣܢܓ ܪܒ ܐܠܐ .ܐܢ̈ܪܕܥܡ</span>
+<span class="go">OUT ܐܘܬܚ .ܗ ܐܘܗ ܚܫܚ ܗܬܘܟܐ ܐܘܢܓ ܪ ܐܠܐ .ܐܢܪܕܥܡ</span>
+</pre></div>
+</div>
+<p>After stoppig training, pick your chosen model and copy it somehwere safe. It
+is highly recommended to also archive the training log and data for later
+reference.</p>
+</div>
+<div class="section" id="recognition">
+<h2>Recognition<a class="headerlink" href="#recognition" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">kraken</span></code> utility is employed for all non-training related tasks. Optical
+character recognition is a multi-step process consisting of binarization
+(conversion of input images to black and white), page segmentation (extracting
+lines from the image), and recognition (converting line image to character
+sequences). All of these may be run in a single call like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i INPUT_IMAGE OUTPUT_FILE binarize segment ocr -m MODEL_FILE
+</pre></div>
+</div>
+<p>producing a text file from the input image. There are also <a class="reference external" href="http://hocr.info">hocr</a> and <a class="reference external" href="https://www.loc.gov/standards/alto/">ALTO</a> output
+formats available through the appropriate switches:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ocr -h
+<span class="gp">$</span> kraken -i ... ocr -a
+</pre></div>
+</div>
+<p>For debugging purposes it is sometimes helpful to run each step manually and
+inspect intermediate results:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i INPUT_IMAGE BW_IMAGE binarize
+<span class="gp">$</span> kraken -i BW_IMAGE LINES segment
+<span class="gp">$</span> kraken -i BW_IMAGE OUTPUT_FILE ocr -l LINES ...
+</pre></div>
+</div>
+<p>It is also possible to recognize more than one file at a time by just chaining
+<code class="docutils literal"><span class="pre">-i</span> <span class="pre">...</span> <span class="pre">...</span></code> clauses like this:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i input_1 output_1 -i input_2 output_2 ...
+</pre></div>
+</div>
+<p>Finally, there is an central repository containing freely available models.
+Getting a list of all available models:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken list
+</pre></div>
+</div>
+<p>Retrieving model metadata for a particular model:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken show arabic-alam-al-kutub
+<span class="go">name: arabic-alam-al-kutub.clstm</span>
+
+<span class="go">An experimental model for Classical Arabic texts.</span>
+
+<span class="go">Network trained on 889 lines of [0] as a test case for a general Classical</span>
+<span class="go">Arabic model. Ground truth was prepared by Sarah Savant</span>
+<span class="go">&lt;sarah.savant@aku.edu&gt; and Maxim Romanov &lt;maxim.romanov@uni-leipzig.de&gt;.</span>
+
+<span class="go">Vocalization was omitted in the ground truth. Training was stopped at ~35000</span>
+<span class="go">iterations with an accuracy of 97%.</span>
+
+<span class="go">[0] Ibn al-Faqīh (d. 365 AH). Kitāb al-buldān. Edited by Yūsuf al-Hādī, 1st</span>
+<span class="go">edition. Bayrūt: ʿĀlam al-kutub, 1416 AH/1996 CE.</span>
+<span class="go">alphabet:  !()-.0123456789:[] «»،؟ءابةتثجحخدذرزسشصضطظعغفقكلمنهوىي ARABIC</span>
+<span class="go">MADDAH ABOVE, ARABIC HAMZA ABOVE, ARABIC HAMZA BELOW</span>
+</pre></div>
+</div>
+<p>and actually fetching the model:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken get arabic-alam-al-kutub
+</pre></div>
+</div>
+<p>The downloaded model can then be used for recognition by the name shown in its metadata, e.g.:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i INPUT_IMAGE OUTPUT_FILE binarize segment ocr -m arabic-alam-al-kutub.clstm
+</pre></div>
+</div>
+<p>For more documentation see the kraken <a class="reference external" href="http://kraken.re">website</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/kraken.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Training a kraken model</a><ul>
+<li><a class="reference internal" href="#installing-kraken">Installing kraken</a></li>
+<li><a class="reference internal" href="#image-acquisition-and-preprocessing">Image acquisition and preprocessing</a></li>
+<li><a class="reference internal" href="#transcription">Transcription</a></li>
+<li><a class="reference internal" href="#training">Training</a></li>
+<li><a class="reference internal" href="#recognition">Recognition</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, mittagessen.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/training.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

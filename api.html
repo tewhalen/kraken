@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>kraken API &mdash; kraken 0.8.0
+    <title>kraken API &mdash; kraken 0.9.1
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.8.0
+        VERSION:     '0.9.1
 ',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="kraken 0.8.0
+    <link rel="top" title="kraken 0.9.1
  documentation" href="index.html" />
     <link rel="next" title="Models" href="models.html" />
     <link rel="prev" title="Training" href="ketos.html" />
@@ -50,6 +50,23 @@ development stage and the API is still quite rudimentary nothing can be
 garantueed.</p>
 <div class="section" id="module-kraken.binarization">
 <span id="kraken-binarization-module"></span><h2>kraken.binarization module<a class="headerlink" href="#module-kraken.binarization" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="kraken.binarization.is_bitonal">
+<code class="descclassname">kraken.binarization.</code><code class="descname">is_bitonal</code><span class="sig-paren">(</span><em>im</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.binarization.is_bitonal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests a PIL.Image for bitonality.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>im</strong> (<em>PIL.Image</em>) &#8211; Image to test</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the image contains only two different color values. False
+otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="kraken.binarization.nlbin">
 <code class="descclassname">kraken.binarization.</code><code class="descname">nlbin</code><span class="sig-paren">(</span><em>im</em>, <em>threshold=0.5</em>, <em>zoom=0.5</em>, <em>escale=1.0</em>, <em>border=0.1</em>, <em>perc=80</em>, <em>range=20</em>, <em>low=5</em>, <em>high=90</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.binarization.nlbin" title="Permalink to this definition">¶</a></dt>
@@ -79,68 +96,8 @@ garantueed.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-kraken.html">
-<span id="kraken-html-module"></span><h2>kraken.html module<a class="headerlink" href="#module-kraken.html" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="kraken.html.delta">
-<code class="descclassname">kraken.html.</code><code class="descname">delta</code><span class="sig-paren">(</span><em>root=(0</em>, <em>0</em>, <em>0</em>, <em>0)</em>, <em>coordinates=None</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.html.delta" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the running delta from a root coordinate according to the
-hOCR standard.</p>
-<p>It uses a root bounding box (x0, y0, x1, y1) and calculates the delta from
-the points (min(x0, x1), min(y0, y1)) and (min(x0, x1), max(y0, y1)) for
-the first and second pair of values in a delta (dx0, dy0, dx1, dy1)
-respectively.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coordinates</strong> (<em>list</em>) &#8211; List of tuples of length 4 containing absolute
-coordinates for character bounding boxes.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A tuple dx0, dy0, dx1, dy1</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="kraken.html.hocr">
-<code class="descclassname">kraken.html.</code><code class="descname">hocr</code><span class="sig-paren">(</span><em>records</em>, <em>image_name=u''</em>, <em>image_size=(0</em>, <em>0)</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.html.hocr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Merges a list of predictions and their corresponding character positions
-into an hOCR document.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>records</strong> (<em>iterable</em>) &#8211; List of kraken.rpred.ocr_record</li>
-<li><strong>image_name</strong> (<em>unicode</em>) &#8211; Name of the source image</li>
-<li><strong>image_size</strong> (<em>tuple</em>) &#8211; Dimensions of the source image</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="kraken.html.max_bbox">
-<code class="descclassname">kraken.html.</code><code class="descname">max_bbox</code><span class="sig-paren">(</span><em>boxes</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.html.max_bbox" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates the minimal bounding box containing all boxes contained in an
-iterator.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>boxes</strong> (<em>iterator</em>) &#8211; An iterator returning tuples of the format (x0, y0,
-x1, y1)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A box covering all bounding boxes in the input argument</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
+<div class="section" id="kraken-serialize-module">
+<h2>kraken.serialize module<a class="headerlink" href="#kraken-serialize-module" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="module-kraken.pageseg">
 <span id="kraken-pageseg-module"></span><h2>kraken.pageseg module<a class="headerlink" href="#module-kraken.pageseg" title="Permalink to this headline">¶</a></h2>
@@ -405,6 +362,9 @@ information from a list of ocr_record objects.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="kraken-train-module">
+<h2>kraken.train module<a class="headerlink" href="#kraken-train-module" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="module-kraken.linegen">
 <span id="kraken-linegen-module"></span><h2>kraken.linegen module<a class="headerlink" href="#module-kraken.linegen" title="Permalink to this headline">¶</a></h2>
 <p>=
@@ -597,10 +557,11 @@ the degradations argument of ocropus-linegen.</li>
   <ul>
 <li><a class="reference internal" href="#">kraken API</a><ul>
 <li><a class="reference internal" href="#module-kraken.binarization">kraken.binarization module</a></li>
-<li><a class="reference internal" href="#module-kraken.html">kraken.html module</a></li>
+<li><a class="reference internal" href="#kraken-serialize-module">kraken.serialize module</a></li>
 <li><a class="reference internal" href="#module-kraken.pageseg">kraken.pageseg module</a></li>
 <li><a class="reference internal" href="#kraken-rpred-module">kraken.rpred module</a></li>
 <li><a class="reference internal" href="#module-kraken.transcrib">kraken.transcrib module</a></li>
+<li><a class="reference internal" href="#kraken-train-module">kraken.train module</a></li>
 <li><a class="reference internal" href="#module-kraken.linegen">kraken.linegen module</a></li>
 </ul>
 </li>
