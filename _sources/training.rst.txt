@@ -274,6 +274,144 @@ After stoppig training, pick your chosen model and copy it somehwere safe. It
 is highly recommended to also archive the training log and data for later
 reference.
 
+Evaluation and Validation
+-------------------------
+
+While output during training is detailed enough to know when to stop training
+one usually wants to know the specific kinds of errors to expect. Doing more
+in-depth error analysis also allows to pinpoint weaknesses in the training
+data, e.g. above average error rates for numerals indicate either a lack of
+representation of numerals in the training data or erroneous transcription in
+the first place.
+
+First the trained model has to be applied to the line images by invoking
+``eval.py`` with the model and a directory containing line images:
+
+.. code-block:: console
+
+        $ ./eval.py output_dir model_file
+
+The recognition output is written into ``rec.txt``, the ground truth is
+concatenated into a file called ``gt.txt``. There will also be a file
+``report.txt`` containing the detailed accuracy report:
+
+.. code-block:: console
+
+	UNLV-ISRI OCR Accuracy Report Version 5.1
+	-----------------------------------------
+	   35632   Characters
+	    1477   Errors
+	   95.85%  Accuracy
+	
+	       0   Reject Characters
+	       0   Suspect Markers
+	       0   False Marks
+	    0.00%  Characters Marked
+	   95.85%  Accuracy After Correction
+	
+	     Ins    Subst      Del   Errors
+	       0        0        0        0   Marked
+	     151      271     1055     1477   Unmarked
+	     151      271     1055     1477   Total
+	
+	   Count   Missed   %Right
+	   27046      155    99.43   Unassigned
+	    5843       13    99.78   ASCII Spacing Characters
+	    1089      108    90.08   ASCII Special Symbols
+	      77       53    31.17   ASCII Digits
+	      15       15     0.00   ASCII Uppercase Letters
+	       4        4     0.00   Latin1 Spacing Characters
+	    1558       74    95.25   Combining Diacritical Marks
+	   35632      422    98.82   Total
+	
+	  Errors   Marked   Correct-Generated
+	     815        0   {}-{ }
+	      29        0   {}-{̈}
+	      29        0   {}-{̣}
+	      20        0   {[}-{ ]}
+	      18        0   {̈}-{}
+	      18        0   {̣}-{}
+	      15        0   {̇}-{}
+	      13        0   {}-{.}
+	      12        0   {}-{. }
+	      12        0   {}-{ܝ}
+	       9        0   {}-{ܠ}
+	       9        0   {}-{ܢ}
+	       8        0   { }-{}
+	       8        0   {ܨ}-{ܢ}
+	       8        0   {[SECTIO}-{ ] ܐܘܘ...}
+	
+	.....
+
+	Count   Missed   %Right
+	 5843       13    99.78   { }
+	   72        0   100.00   {*}
+	  909       13    98.57   {.}
+	    4        4     0.00   {0}
+	   22        6    72.73   {1}
+	   15       12    20.00   {2}
+	    9        7    22.22   {3}
+	    4        4     0.00   {4}
+	    5        3    40.00   {5}
+	    5        5     0.00   {6}
+	    4        4     0.00   {7}
+	    5        4    20.00   {8}
+	    4        4     0.00   {9}
+	    4        4     0.00   {:}
+	    2        2     0.00   {C}
+	    2        2     0.00   {E}
+	    5        5     0.00   {I}
+	    2        2     0.00   {O}
+	    2        2     0.00   {S}
+	    2        2     0.00   {T}
+	   52       45    13.46   {[}
+	   52       46    11.54   {]}
+	    4        4     0.00   { }
+	  297       22    92.59   {̇}
+	  538       26    95.17   {̈}
+	  723       26    96.40   {̣}
+	  149        6    95.97   {܀}
+	   46       12    73.91   {܆}
+	    9        8    11.11   {܇}
+	 3891       16    99.59   {ܐ}
+	 1309        6    99.54   {ܒ}
+	  190        1    99.47   {ܓ}
+	 1868        9    99.52   {ܕ}
+	 1862        7    99.62   {ܗ}
+	 2588       10    99.61   {ܘ}
+	   87        2    97.70   {ܙ}
+	  484        2    99.59   {ܚ}
+	  225        0   100.00   {ܛ}
+
+	.....
+
+The first section of the report consists of a simple accounting of the number
+of characters in the ground truth, the errors in the recognition output and the
+resulting accuracy in per cent.
+
+The next section can be ignored.
+
+The next table lists the number of insertions (characters occuring in the
+ground truth but not in the recognition output), substitutions (misrecognized
+characters), and deletions (superfluous characters recognized by the model).
+
+Next is a grouping of errors (insertions and substitutions) by Unicode
+character class. As the report tool does not have proper Unicode support,
+Syriac characters are classified as ``Unassigned``. Nevertheless it is apparent
+that numerals are recognized markedly worse than every other class, presumably
+because they are severely underrepresented (77) in the training set. Further
+all Latin text is misrecognized, as the training set did not contain any and
+there is a small inconsistency in the test set caused by Latin-1 spacing
+characters. 
+
+The final two parts of the report are errors sorted by frequency and a per
+character accuracy report. Importantly, over half the overall errors are caused
+by incorrect whitespace produced by the model. These may have several sources:
+different spacing in training and test set, incorrect transcription such as
+leading/trailing whitespace, or. Depending on the error source, correction most
+often involves adding more training data and fixing transcriptions. Sometimes
+it may even be advisable to remove unrepresentative data from the training set.
+
 Recognition
 -----------
 

@@ -43,12 +43,18 @@ Pull requests and code contributions are always welcome.
 Installation
 ============
 
+.. note::
+
+  A vagrant virtual machine is also available on the hashicorp atlas. Run
+  ``vagrant init openphilology/kraken && vagrant up`` to install without doing
+  any compiling yourself.
+
 kraken requires some external libraries to run. On Debian/Ubuntu they may be
 installed using:
 
 .. code-block:: console
 
-        # apt-get install libpangocairo-1.0 libxml2 libblas3 liblapack3
+        # apt-get install libpangocairo-1.0 libxml2 libblas3 liblapack3 python-dev
 
 If `clstm <https://github.com/tmbdev/clstm>`_ support is desired (highly
 recommended) the associated python extension has to be build and installed.
@@ -58,7 +64,7 @@ scipy build process numpy has to be installed before doing the actual install:
 
 .. code-block:: console
 
-  # pip install numpy
+  $ pip install numpy
 
 Install kraken either from pypi:
 
@@ -150,6 +156,11 @@ page segmentation:
 
 All commands and their parameters are documented, just add the standard
 ``--help`` flag for further information.
+
+Training Tutorial
+=================
+
+There is a training tutorial at :doc:`training`.
 
 .. _license:
 

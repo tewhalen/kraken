@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Advanced usage &mdash; kraken 0.9.1
+    <title>Advanced usage &#8212; kraken 0.9.2-6-g6ccaf1c
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -15,26 +15,29 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.1
-',
+        VERSION:     '0.9.2-6-g6ccaf1c',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="kraken 0.9.1
- documentation" href="index.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Training" href="ketos.html" />
     <link rel="prev" title="kraken" href="index.html" />
    
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">  
+  <body>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -53,7 +56,7 @@ ALTO.</p>
 <h2>Input specification<a class="headerlink" href="#input-specification" title="Permalink to this headline">¶</a></h2>
 <p>All kraken subcommands operating on input-output pairs, i.e. producing one
 output document for one input document follow the basic syntax:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i input_1 output_1 -i input_2 output_2 ... subcommand_1 subcommand_2 ... subcommand_n
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i input_1 output_1 -i input_2 output_2 ... subcommand_1 subcommand_2 ... subcommand_n
 </pre></div>
 </div>
 <p>In particular subcommands may be chained.</p>
@@ -73,7 +76,7 @@ binarize any image that is thrown at it.</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">--threshold <var>FLOAT</var></span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>TODO</td></tr>
+<tr><td>&#160;</td><td>TODO</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--zoom <var>FLOAT</var></span></kbd></td>
 <td>TODO</td></tr>
@@ -86,7 +89,7 @@ binarize any image that is thrown at it.</p>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>&#8211;perc INTEGER RANGE</dt>
+<dt>–perc INTEGER RANGE</dt>
 <dd>TODO</dd>
 </dl>
 <table class="docutils option-list" frame="void" rules="none">
@@ -96,13 +99,13 @@ binarize any image that is thrown at it.</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">--range <var>INTEGER</var></span></kbd></td>
 </tr>
-<tr><td>&nbsp;</td><td>TODO</td></tr>
+<tr><td>&#160;</td><td>TODO</td></tr>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>&#8211;low INTEGER RANGE</dt>
+<dt>–low INTEGER RANGE</dt>
 <dd>TODO</dd>
-<dt>&#8211;high INTEGER RANGE</dt>
+<dt>–high INTEGER RANGE</dt>
 <dd>TODO</dd>
 </dl>
 </div>
@@ -112,7 +115,7 @@ binarize any image that is thrown at it.</p>
 color of column separators has been retained. The segmentation is written as a
 plain text CSV file. Each record corresponds to a single line bounding box in
 the format (x0, y0, x1, y1). Lines are printed in reading order:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i 14.tif lines.txt segment
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i <span class="m">14</span>.tif lines.txt segment
 <span class="gp">$</span> cat lines.txt
 <span class="go">422,188,2158,327</span>
 <span class="go">421,328,2158,430</span>
@@ -149,14 +152,14 @@ using the normal git client.</p>
 <p>The <code class="docutils literal"><span class="pre">list</span></code> subcommand retrieves a list of all models available and prints
 them including some additional information (identifier, type, and a short
 description):</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken list
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken list
 <span class="go">Retrieving model list   ✓</span>
 <span class="go">default (pyrnn) - A converted version of en-default.pyrnn.gz</span>
 <span class="go">toy (clstm) - A toy model trained on 400 lines of the UW3 data set.</span>
 </pre></div>
 </div>
 <p>To access more detailed information the <code class="docutils literal"><span class="pre">show</span></code> subcommand may be used:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken show toy
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken show toy
 <span class="go">name: toy.clstm</span>
 
 <span class="go">A toy model trained on 400 lines of the UW3 data set.</span>
@@ -167,13 +170,13 @@ description):</p>
 </div>
 <p>If a suitable model has been decided upon it can be retrieved using the <code class="docutils literal"><span class="pre">get</span></code>
 subcommand:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken get toy
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken get toy
 <span class="go">Retrieving model        ✓</span>
 </pre></div>
 </div>
 <p>Models will be placed in $XDG_BASE_DIR and can be accessed using their name as
 shown by the <code class="docutils literal"><span class="pre">show</span></code> command, e.g.:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -m toy
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i ... ... ocr -m toy
 </pre></div>
 </div>
 <p>Additions and updates to existing models are always welcome! Just open a pull
@@ -188,9 +191,9 @@ subcommand or the binarization provided by kraken.</p>
 <p>The <code class="docutils literal"><span class="pre">ocr</span></code> subcommand is able to serialize the recognition results either as
 plain text (default), as <a class="reference external" href="http://hocr.info">hOCR</a>, or into <a class="reference external" href="http://www.loc.gov/standards/alto/">ALTO</a> containing additional metadata such as
 bounding boxes and confidences:</p>
-<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -t <span class="c"># text output</span>
-<span class="gp">$</span> kraken -i ... ... ocr -h <span class="c"># hOCR output</span>
-<span class="gp">$</span> kraken -i ... ... ocr -a <span class="c"># ALTO output</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i ... ... ocr -t <span class="c1"># text output</span>
+<span class="gp">$</span> kraken -i ... ... ocr -h <span class="c1"># hOCR output</span>
+<span class="gp">$</span> kraken -i ... ... ocr -a <span class="c1"># ALTO output</span>
 </pre></div>
 </div>
 <p>hOCR output is slightly different from hOCR files produced by ocropus. Each
@@ -237,14 +240,11 @@ certain typographic features which may not be valid for your input.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -255,11 +255,11 @@ certain typographic features which may not be valid for your input.</p>
       &copy;2015, mittagessen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
-      <a href="_sources/advanced.txt"
+      <a href="_sources/advanced.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
