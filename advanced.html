@@ -1,12 +1,12 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Advanced usage &#8212; kraken 0.9.2-6-g6ccaf1c
+    <title>Advanced usage &mdash; kraken 0.9.5
  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
@@ -15,29 +15,26 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.2-6-g6ccaf1c',
+        VERSION:     '0.9.5
+',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
+        HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="kraken 0.9.5
+ documentation" href="index.html" />
     <link rel="next" title="Training" href="ketos.html" />
     <link rel="prev" title="kraken" href="index.html" />
    
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
   
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body>
-  
+  <body role="document">  
 
     <div class="document">
       <div class="documentwrapper">
@@ -56,7 +53,7 @@ ALTO.</p>
 <h2>Input specification<a class="headerlink" href="#input-specification" title="Permalink to this headline">¶</a></h2>
 <p>All kraken subcommands operating on input-output pairs, i.e. producing one
 output document for one input document follow the basic syntax:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i input_1 output_1 -i input_2 output_2 ... subcommand_1 subcommand_2 ... subcommand_n
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i input_1 output_1 -i input_2 output_2 ... subcommand_1 subcommand_2 ... subcommand_n
 </pre></div>
 </div>
 <p>In particular subcommands may be chained.</p>
@@ -76,7 +73,7 @@ binarize any image that is thrown at it.</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">--threshold <var>FLOAT</var></span></kbd></td>
 </tr>
-<tr><td>&#160;</td><td>TODO</td></tr>
+<tr><td>&nbsp;</td><td>TODO</td></tr>
 <tr><td class="option-group">
 <kbd><span class="option">--zoom <var>FLOAT</var></span></kbd></td>
 <td>TODO</td></tr>
@@ -89,7 +86,7 @@ binarize any image that is thrown at it.</p>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>–perc INTEGER RANGE</dt>
+<dt>&#8211;perc INTEGER RANGE</dt>
 <dd>TODO</dd>
 </dl>
 <table class="docutils option-list" frame="void" rules="none">
@@ -99,13 +96,13 @@ binarize any image that is thrown at it.</p>
 <tr><td class="option-group" colspan="2">
 <kbd><span class="option">--range <var>INTEGER</var></span></kbd></td>
 </tr>
-<tr><td>&#160;</td><td>TODO</td></tr>
+<tr><td>&nbsp;</td><td>TODO</td></tr>
 </tbody>
 </table>
 <dl class="docutils">
-<dt>–low INTEGER RANGE</dt>
+<dt>&#8211;low INTEGER RANGE</dt>
 <dd>TODO</dd>
-<dt>–high INTEGER RANGE</dt>
+<dt>&#8211;high INTEGER RANGE</dt>
 <dd>TODO</dd>
 </dl>
 </div>
@@ -113,35 +110,80 @@ binarize any image that is thrown at it.</p>
 <h2>Page segmentation<a class="headerlink" href="#page-segmentation" title="Permalink to this headline">¶</a></h2>
 <p>Page segmentation is mostly parameterless, although a switch to change the
 color of column separators has been retained. The segmentation is written as a
-plain text CSV file. Each record corresponds to a single line bounding box in
-the format (x0, y0, x1, y1). Lines are printed in reading order:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i <span class="m">14</span>.tif lines.txt segment
-<span class="gp">$</span> cat lines.txt
-<span class="go">422,188,2158,327</span>
-<span class="go">421,328,2158,430</span>
-<span class="go">415,464,2153,599</span>
-<span class="go">412,604,2153,745</span>
-<span class="go">406,744,2152,882</span>
-<span class="go">405,877,2144,1020</span>
-<span class="go">403,1020,2139,1150</span>
-<span class="go">399,1160,2136,1297</span>
-<span class="go">394,1292,2137,1435</span>
-<span class="go">391,1431,2131,1572</span>
-<span class="go">385,1566,2128,1709</span>
-<span class="go">379,1710,2128,1830</span>
-<span class="go">383,1854,2126,1986</span>
-<span class="go">370,1985,2125,2127</span>
-<span class="go">369,2123,2118,2268</span>
-<span class="go">369,2268,2111,2407</span>
-<span class="go">366,2401,2116,2514</span>
-<span class="go">363,2541,2107,2682</span>
-<span class="go">364,2677,2109,2819</span>
-<span class="go">358,2815,2106,2956</span>
-<span class="go">354,2955,2098,3092</span>
-<span class="go">355,3092,2094,3230</span>
-<span class="go">1859,3233,2084,3354</span>
+<a class="reference external" href="http://json.org/">JSON</a> file containing bounding boxes in reading order and
+the general text direction (horizontal, i.e. LTR or RTL text in top-to-bottom
+reading order or vertical-ltr/rtl for vertical lines read from left-to-right or
+right-to-left).</p>
+<p>Each list in the <cite>boxes</cite> field corresponds to a topographical line and contains
+one or more bounding boxes of a particular script. Identifiers are <a class="reference external" href="http://www.unicode.org/iso15924/iso15924-codes.html">ISO 15924</a> 4 character codes.
+Script-aware page segmentation is a prerequisite for multi-script recognition.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i 14.tif lines.txt segment
+<span class="gp">$</span> cat lines.json
+<span class="go">{</span>
+<span class="go">   &quot;boxes&quot; : [</span>
+<span class="go">    [</span>
+<span class="go">        [&quot;Grek&quot;, [561, 216, 1626,309]]</span>
+<span class="go">    ],</span>
+<span class="go">    [</span>
+<span class="go">        [&quot;Latn&quot;, [2172, 197, 2424, 244]]</span>
+<span class="go">    ],</span>
+<span class="go">    [</span>
+<span class="go">        [&quot;Grek&quot;, [1678, 221, 2236, 320]],</span>
+<span class="go">        [&quot;Arab&quot;, [2241, 221, 2302, 320]]</span>
+<span class="go">    ],</span>
+
+<span class="go">        [&quot;Grek&quot;, [412, 318, 2215, 416]],</span>
+<span class="go">        [&quot;Latn&quot;, [2208, 318, 2424, 416]]</span>
+<span class="go">    ],</span>
+<span class="go">    ...</span>
+<span class="go">   ],</span>
+<span class="go">   &quot;text_direction&quot; : &quot;horizontal-tb&quot;</span>
+<span class="go">}</span>
 </pre></div>
 </div>
+<p>Script detection is automatically enabled when the CLSTM bindings are
+installed. Without the bindings or by explicitly disabling script detection the
+<cite>boxes</cite> field will contain only a list of line bounding boxes:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">[546, 216, 1626, 309],</span>
+<span class="go">[2169, 197, 2423, 244],</span>
+<span class="go">[1676, 221, 2293, 320],</span>
+<span class="go">...</span>
+<span class="go">[503, 2641, 848, 2681]</span>
+</pre></div>
+</div>
+<p>Available page segmentation parameters are:</p>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-d</span>, <span class="option">--text-direction</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Sets principal text direction. Valid values are <cite>horizontal-tb</cite>,
+<cite>vertical-lr</cite>, and <cite>vertical-rl</cite>.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>-s, &#8211;script-detect / -n, &#8211;no-script-detect</dt>
+<dd>Enables/Disables script detection on segmenter output.</dd>
+</dl>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd><span class="option">--scale <var>FLOAT</var></span></kbd></td>
+<td>TODO</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd><span class="option">-m</span>, <span class="option">--maxcolseps</span></kbd></td>
+</tr>
+<tr><td>&nbsp;</td><td>Maximum number of columns in the input document. Set to <cite>0</cite> for uni-column layouts.</td></tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>-b, &#8211;black_colseps / -w, &#8211;white_colseps</dt>
+<dd>Switch to black column separators.</dd>
+</dl>
 </div>
 <div class="section" id="model-repository">
 <h2>Model repository<a class="headerlink" href="#model-repository" title="Permalink to this headline">¶</a></h2>
@@ -152,14 +194,14 @@ using the normal git client.</p>
 <p>The <code class="docutils literal"><span class="pre">list</span></code> subcommand retrieves a list of all models available and prints
 them including some additional information (identifier, type, and a short
 description):</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken list
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken list
 <span class="go">Retrieving model list   ✓</span>
 <span class="go">default (pyrnn) - A converted version of en-default.pyrnn.gz</span>
 <span class="go">toy (clstm) - A toy model trained on 400 lines of the UW3 data set.</span>
 </pre></div>
 </div>
 <p>To access more detailed information the <code class="docutils literal"><span class="pre">show</span></code> subcommand may be used:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken show toy
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken show toy
 <span class="go">name: toy.clstm</span>
 
 <span class="go">A toy model trained on 400 lines of the UW3 data set.</span>
@@ -170,13 +212,13 @@ description):</p>
 </div>
 <p>If a suitable model has been decided upon it can be retrieved using the <code class="docutils literal"><span class="pre">get</span></code>
 subcommand:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken get toy
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken get toy
 <span class="go">Retrieving model        ✓</span>
 </pre></div>
 </div>
 <p>Models will be placed in $XDG_BASE_DIR and can be accessed using their name as
 shown by the <code class="docutils literal"><span class="pre">show</span></code> command, e.g.:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i ... ... ocr -m toy
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -m toy
 </pre></div>
 </div>
 <p>Additions and updates to existing models are always welcome! Just open a pull
@@ -188,21 +230,35 @@ request or write an email.</p>
 that image, and a pyrnn or protobuf model. In particular there is no
 requirement to use the page segmentation algorithm contained in the <code class="docutils literal"><span class="pre">segment</span></code>
 subcommand or the binarization provided by kraken.</p>
+<p>Multi-script recognition is possible by supplying a script-annotated
+segmentation and a mapping between scripts and models:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -m Grek:porson.clstm -m Latn:antiqua.clstm
+</pre></div>
+</div>
+<p>All polytonic Greek text portions will be recognized using the <cite>porson.clstm</cite>
+model while Latin text will be fed into the <cite>antiqua.clstm</cite> model. It is
+possible to define a fallback model that other text will be fed to:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -m ... -m ... -m default:porson.clstm
+</pre></div>
+</div>
+<p>Because script detection is not 100% reliable and sometimes single characters
+are misclassified, the main text should usually be recognized using the
+<cite>default</cite> model and secondary scripts explicitly assigned other models.</p>
 <p>The <code class="docutils literal"><span class="pre">ocr</span></code> subcommand is able to serialize the recognition results either as
 plain text (default), as <a class="reference external" href="http://hocr.info">hOCR</a>, or into <a class="reference external" href="http://www.loc.gov/standards/alto/">ALTO</a> containing additional metadata such as
 bounding boxes and confidences:</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> kraken -i ... ... ocr -t <span class="c1"># text output</span>
-<span class="gp">$</span> kraken -i ... ... ocr -h <span class="c1"># hOCR output</span>
-<span class="gp">$</span> kraken -i ... ... ocr -a <span class="c1"># ALTO output</span>
+<div class="highlight-console"><div class="highlight"><pre><span class="gp">$</span> kraken -i ... ... ocr -t <span class="c"># text output</span>
+<span class="gp">$</span> kraken -i ... ... ocr -h <span class="c"># hOCR output</span>
+<span class="gp">$</span> kraken -i ... ... ocr -a <span class="c"># ALTO output</span>
 </pre></div>
 </div>
 <p>hOCR output is slightly different from hOCR files produced by ocropus. Each
 <code class="docutils literal"><span class="pre">ocr_line</span></code> span contains not only the bounding box of the line but also
-character cuts (<code class="docutils literal"><span class="pre">cuts</span></code> attribute) indicating the coordinates of each
-character. In each line sequences of alphanumeric (in the unicode sense)
-character are put into <code class="docutils literal"><span class="pre">ocrx_word</span></code> spans. Non-alphanumeric sequences are
-described by <code class="docutils literal"><span class="pre">ocrx_word</span></code> spans. Both have bounding boxes as attributes and
-the recognition confidence for each character in the <code class="docutils literal"><span class="pre">x_conf</span></code> attribute.</p>
+character boxes (<code class="docutils literal"><span class="pre">x_bboxes</span></code> attribute) indicating the coordinates of each
+character. In each line alternating sequences of alphanumeric and
+non-alphanumeric (in the unicode sense) characters are put into <code class="docutils literal"><span class="pre">ocrx_word</span></code>
+spans. Both have bounding boxes as attributes and the recognition confidence
+for each character in the <code class="docutils literal"><span class="pre">x_conf</span></code> attribute.</p>
 <p>Paragraph detection has been removed as it was deemed to be unduly dependent on
 certain typographic features which may not be valid for your input.</p>
 </div>
@@ -240,11 +296,14 @@ certain typographic features which may not be valid for your input.</p>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -255,11 +314,11 @@ certain typographic features which may not be valid for your input.</p>
       &copy;2015, mittagessen.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
       
       |
-      <a href="_sources/advanced.rst.txt"
+      <a href="_sources/advanced.txt"
           rel="nofollow">Page source</a>
     </div>
 
