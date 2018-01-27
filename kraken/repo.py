@@ -31,14 +31,30 @@ import requests
 import json
 import os
 import logging
+import httplib
 
+try: # for Python 3
+    from http.client import HTTPConnection
+except ImportError:
+    from httplib import HTTPConnection
+HTTPConnection.debuglevel = 1
+
+logging.basicConfig()
 logger = logging.getLogger(__name__)
+
+logger.setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
 
 MODEL_REPO = 'https://api.github.com/repos/mittagessen/kraken-models/'
 
 def get_model(model_id, path, callback):
     logger.info('Retrieving head of model repository')
     r = requests.get('{}{}'.format(MODEL_REPO, 'git/refs/heads/master'))
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
     callback()
     resp = r.json()
     if 'object' not in resp:
@@ -46,6 +62,9 @@ def get_model(model_id, path, callback):
     head = resp['object']['sha']
     logger.info('Retrieving tree of model repository')
     r = requests.get('{}{}{}'.format(MODEL_REPO, 'git/trees/', head), params={'recursive': 1})
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
     callback()
     resp = r.json()
     if 'tree' not in resp:
@@ -73,12 +92,18 @@ def get_model(model_id, path, callback):
 def get_description(model_id):
     logger.info('Retrieving head of model repository')
     r = requests.get('{}{}'.format(MODEL_REPO, 'git/refs/heads/master'))
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
     resp = r.json()
     if 'object' not in resp:
         raise KrakenRepoException('{}: {}'.format(r.status_code, resp['message']))
     head = resp['object']['sha']
     logger.info('Retrieving tree of model repository')
     r = requests.get('{}{}{}'.format(MODEL_REPO, 'git/trees/', head), params={'recursive': 1})
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
     resp = r.json()
     if 'tree' not in resp:
         raise KrakenRepoException('{}: {}'.format(r.status_code, resp['message']))
@@ -93,6 +118,9 @@ def get_description(model_id):
 def get_listing(callback):
     logger.info('Retrieving head of model repository')
     r = requests.get('{}{}'.format(MODEL_REPO, 'git/refs/heads/master'))
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
     callback()
     resp = r.json()
     if 'object' not in resp:
@@ -100,6 +128,9 @@ def get_listing(callback):
     head = resp['object']['sha']
     logger.info('Retrieving tree of model repository')
     r = requests.get('{}{}{}'.format(MODEL_REPO, 'git/trees/', head), params={'recursive': 1})
+    logging.debug("Response: Status code: %d", r.status_code)
+    logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
     callback()
     resp = r.json()
     if 'tree' not in resp:
@@ -113,6 +144,9 @@ def get_listing(callback):
         if len(components) > 2 and components[2] == 'DESCRIPTION':
             logger.info('Retrieving description for {}'.format(components[1]))
             r = requests.get(el['url'])
+            logging.debug("Response: Status code: %d", r.status_code)
+            logging.debug("Request: %s %s %s", r.request.method, r.request.url, r.request.body)
+
             if not r.ok:
                 raise KrakenRepoException('{}: {}'.format(r.status_code, r.json()['message']))
             raw = base64.b64decode(requests.get(el['url']).json()['content']).decode('utf-8')
