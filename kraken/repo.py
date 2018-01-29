@@ -31,7 +31,6 @@ import requests
 import json
 import os
 import logging
-import httplib
 
 try: # for Python 3
     from http.client import HTTPConnection
