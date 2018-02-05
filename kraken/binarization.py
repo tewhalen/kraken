@@ -16,6 +16,7 @@
 # permissions and limitations under the License.
 
 from __future__ import absolute_import, division, print_function
+from __future__ import unicode_literals
 
 import warnings
 import numpy as np
@@ -41,6 +42,25 @@ def is_bitonal(im):
     else:
         return False
 
+def deskew(im):
+    """
+    Estimates the skew angle.
+
+    Args:
+        im (PIL.Image): grayscale or b/w input image
+
+    Returns:
+        PIL.Image of the deskewed image and the estimated skew angle
+    """
+
+    if im.mode not in ['1', 'L']:
+        raise KrakenInputException('Image mode {} not in [1, L].'.format(im.mode))
+    raw = pil2array(im)
+    raw = raw * 1.0/raw.max()
+    sx = sobel(raw, axis=0)
+    sy = sobel(raw, axis=1)
+    phi = np.arctan2(sy, sx)
+    return np.histogram(phi, bins=2000)
 
 def nlbin(im, threshold=0.5, zoom=0.5, escale=1.0, border=0.1, perc=80,
           range=20, low=5, high=90):
