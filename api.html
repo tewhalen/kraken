@@ -5,14 +5,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>kraken API &#8212; kraken 0.9.6
+    <title>kraken API &#8212; kraken 0.9.8-1-gf898512
  documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.9.6',
+        VERSION:     '0.9.8-1-gf898512',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -100,7 +100,7 @@ otherwise.</td>
 <span id="kraken-serialization-module"></span><h2>kraken.serialization module<a class="headerlink" href="#module-kraken.serialization" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="kraken.serialization.serialize">
-<code class="descclassname">kraken.serialization.</code><code class="descname">serialize</code><span class="sig-paren">(</span><em>records</em>, <em>image_name=u''</em>, <em>image_size=(0</em>, <em>0)</em>, <em>writing_mode=u'horizontal-tb'</em>, <em>scripts=None</em>, <em>template=u'hocr'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.serialization.serialize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">kraken.serialization.</code><code class="descname">serialize</code><span class="sig-paren">(</span><em>records</em>, <em>image_name=u''</em>, <em>image_size=(0</em>, <em>0)</em>, <em>writing_mode='horizontal-tb'</em>, <em>scripts=None</em>, <em>template='hocr'</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.serialization.serialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Serializes a list of ocr_records into an output document.</p>
 <p>Serializes a list of predictions and their corresponding positions by doing
 some hOCR-specific preprocessing and then renders them through one of
@@ -132,7 +132,7 @@ vertical-lr.</li>
 <span id="kraken-pageseg-module"></span><h2>kraken.pageseg module<a class="headerlink" href="#module-kraken.pageseg" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="kraken.pageseg.segment">
-<code class="descclassname">kraken.pageseg.</code><code class="descname">segment</code><span class="sig-paren">(</span><em>im</em>, <em>text_direction=u'horizontal-lr'</em>, <em>scale=None</em>, <em>maxcolseps=2</em>, <em>black_colseps=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.pageseg.segment" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">kraken.pageseg.</code><code class="descname">segment</code><span class="sig-paren">(</span><em>im</em>, <em>text_direction='horizontal-lr'</em>, <em>scale=None</em>, <em>maxcolseps=2</em>, <em>black_colseps=False</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.pageseg.segment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Segments a page into text lines.</p>
 <p>Segments a page into text lines and returns the absolute coordinates of
 each line in reading order.</p>
@@ -360,16 +360,16 @@ positions, and confidence values for each character.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-kraken.transcrib">
-<span id="kraken-transcrib-module"></span><h2>kraken.transcrib module<a class="headerlink" href="#module-kraken.transcrib" title="Permalink to this headline">¶</a></h2>
-<p>Utility functions for ground truth transcription.</p>
+<div class="section" id="kraken-transcribe-module">
+<h2>kraken.transcribe module<a class="headerlink" href="#kraken-transcribe-module" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-kraken.transcribe"></span><p>Utility functions for ground truth transcription.</p>
 </div>
 <div class="section" id="module-kraken.train">
 <span id="kraken-train-module"></span><h2>kraken.train module<a class="headerlink" href="#module-kraken.train" title="Permalink to this headline">¶</a></h2>
 <p>Utility functions for training CLSTM neural networks.</p>
 <dl class="class">
 <dt id="kraken.train.GroundTruthContainer">
-<em class="property">class </em><code class="descclassname">kraken.train.</code><code class="descname">GroundTruthContainer</code><span class="sig-paren">(</span><em>images=None</em>, <em>split=&lt;function &lt;lambda&gt;&gt;</em>, <em>suffix=u'.gt.txt'</em>, <em>normalization=None</em>, <em>reorder=True</em>, <em>partition=0.9</em>, <em>pad=16</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.train.GroundTruthContainer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">kraken.train.</code><code class="descname">GroundTruthContainer</code><span class="sig-paren">(</span><em>images=None</em>, <em>split=&lt;function &lt;lambda&gt;&gt;</em>, <em>suffix='.gt.txt'</em>, <em>normalization=None</em>, <em>reorder=True</em>, <em>partition=0.9</em>, <em>pad=16</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.train.GroundTruthContainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
 <p>Container for ground truth used during training.</p>
 <dl class="attribute">
@@ -393,7 +393,7 @@ truth</p>
 
 <dl class="method">
 <dt id="kraken.train.GroundTruthContainer.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>image</em>, <em>split=&lt;function &lt;lambda&gt;&gt;</em>, <em>suffix=u'.gt.txt'</em>, <em>normalization=None</em>, <em>reorder=True</em>, <em>pad=16</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.train.GroundTruthContainer.add" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add</code><span class="sig-paren">(</span><em>image</em>, <em>split=&lt;function &lt;lambda&gt;&gt;</em>, <em>suffix='.gt.txt'</em>, <em>normalization=None</em>, <em>reorder=True</em>, <em>pad=16</em><span class="sig-paren">)</span><a class="headerlink" href="#kraken.train.GroundTruthContainer.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds a single image to the training set.</p>
 </dd></dl>
 
@@ -558,7 +558,7 @@ the degradations argument of ocropus-linegen.</li>
 <li><a class="reference internal" href="#module-kraken.serialization">kraken.serialization module</a></li>
 <li><a class="reference internal" href="#module-kraken.pageseg">kraken.pageseg module</a></li>
 <li><a class="reference internal" href="#module-kraken.rpred">kraken.rpred module</a></li>
-<li><a class="reference internal" href="#module-kraken.transcrib">kraken.transcrib module</a></li>
+<li><a class="reference internal" href="#kraken-transcribe-module">kraken.transcribe module</a></li>
 <li><a class="reference internal" href="#module-kraken.train">kraken.train module</a></li>
 <li><a class="reference internal" href="#module-kraken.linegen">kraken.linegen module</a><ul>
 <li><a class="reference internal" href="#linegen">linegen</a></li>
