@@ -226,6 +226,8 @@ def extract(ctx, normalization, reorder, rotate, output, transcriptions):
               help='Font style to use')
 @click.option('-p', '--prefill', default=None,
               help='Use given model for prefill mode.')
+@click.option('--preseg-lines', default=False,
+            help='Treat images as presegmented lines')
 @click.option('-o', '--output', type=click.File(mode='wb'), default='transcription.html',
               help='Output file')
 @click.argument('images', nargs=-1, type=click.File(mode='rb', lazy=True))
@@ -247,8 +249,11 @@ def transcription(ctx, text_direction, scale, maxcolseps, black_colseps, font,
         if not binarization.is_bitonal(im):
             logger.info(u'Binarizing page')
             im = binarization.nlbin(im)
-        logger.info(u'Segmenting page')
-        res = pageseg.segment(im, text_direction, scale, maxcolseps, black_colseps)
+        if preseg_lines:
+            res = {'text_direction': 'horizontal-tb', 'boxes': [(0,0) + im.size]}
+        else:
+            logger.info(u'Segmenting page')
+            res = pageseg.segment(im, text_direction, scale, maxcolseps, black_colseps)
         if prefill:
             it = rpred.rpred(prefill, im, res)
             preds = []
