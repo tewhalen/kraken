@@ -196,7 +196,7 @@ def extract(ctx, normalization, reorder, rotate, output, transcriptions):
                         im.rotate(90, expand=True)
                     l.save('{}/{:06d}.png'.format(output, idx))
                     manifest.append('{:06d}.png'.format(idx))
-                    text = u''.join(line.itertext())
+                    text = (u''.join(line.itertext())).strip()
                     if normalization:
                         text = unicodedata.normalize(normalization, text)
                     with open('{}/{:06d}.gt.txt'.format(output, idx), 'wb') as t:
@@ -226,7 +226,7 @@ def extract(ctx, normalization, reorder, rotate, output, transcriptions):
               help='Font style to use')
 @click.option('-p', '--prefill', default=None,
               help='Use given model for prefill mode.')
-@click.option('--preseg-lines', default=False,
+@click.option('--segment-page/--preseg-lines', default=False,
             help='Treat images as presegmented lines')
 @click.option('-o', '--output', type=click.File(mode='wb'), default='transcription.html',
               help='Output file')
@@ -249,11 +249,11 @@ def transcription(ctx, text_direction, scale, maxcolseps, black_colseps, font,
         if not binarization.is_bitonal(im):
             logger.info(u'Binarizing page')
             im = binarization.nlbin(im)
-        if preseg_lines:
-            res = {'text_direction': 'horizontal-tb', 'boxes': [(0,0) + im.size]}
-        else:
+        if segment_page:
             logger.info(u'Segmenting page')
             res = pageseg.segment(im, text_direction, scale, maxcolseps, black_colseps)
+        else:
+            res = {'text_direction': 'horizontal-tb', 'boxes': [(0,0) + im.size]}
         if prefill:
             it = rpred.rpred(prefill, im, res)
             preds = []

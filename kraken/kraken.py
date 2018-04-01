@@ -81,6 +81,15 @@ def binarizer(threshold, zoom, escale, border, perc, range, low, high, base_imag
         raise
     message(u'\u2713', fg='green')
 
+def no_segmenter(base_image, input, output):
+    try:
+        im = Image.open(input)
+    except IOError as e:
+        raise click.BadParameter(str(e))
+
+    res = {'text_direction': 'horizontal-tb', 'boxes': [(0,0) + im.size]}
+    with open_file(output, 'w') as fp:
+        json.dump(res, fp)
 
 def segmenter(text_direction, script_detect, scale, maxcolseps, black_colseps, base_image, input, output):
     try:
@@ -188,6 +197,10 @@ def binarize(threshold, zoom, escale, border, perc, range, low, high):
     """
     return partial(binarizer, threshold, zoom, escale, border, perc, range, low, high)
 
+
+@cli.command('no_segment')
+def no_segment():
+    return partial(no_segmenter)
 
 @cli.command('segment')
 @click.option('-d', '--text-direction', default='horizontal-lr',
