@@ -126,7 +126,7 @@ def recognizer(model, pad, bidi_reordering, base_image, input, output, lines):
     with open_file(lines, 'r') as fp:
         bounds = json.load(fp)
         # script detection
-        if bounds['script_detection']:
+        if bounds.get('script_detection',False):
             scripts = set()
             for l in bounds['boxes']:
                 for t in l:
