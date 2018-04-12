@@ -232,7 +232,7 @@ def extract(ctx, normalization, reorder, rotate, output, transcriptions):
               help='Output file')
 @click.argument('images', nargs=-1, type=click.File(mode='rb', lazy=True))
 def transcription(ctx, text_direction, scale, maxcolseps, black_colseps, font,
-                  font_style, prefill, output, images):
+                  font_style, prefill, output, images, segment_page):
     ti = transcribe.TranscriptionInterface(font, font_style)
 
     if prefill:
